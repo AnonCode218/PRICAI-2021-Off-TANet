@@ -137,13 +137,30 @@ class EnhancedResidual(nn.Module):
         x = x + x0
         x = self.pool(x)
         return x
+        
+class BottleneckTransformer(nn.Module):
+    def __init__(self,in_c,out_c,fm_sz,head_n = 4):
+        super(BottleneckTransformer,self).__init__()
+        self.botneck = nn.Conv2d(in_channels = in_c,out_channels = out_c,kernel_size = 1)
+        self.pool = nn.MaxPool2d(kernel_size = 2,stride = 2)
+        self.sa = nn.Sequential(
+            MultiHeadSelfAttention(in_c = in_c,out_c = out_c // head_n,head_n = head_n,fm_sz = fm_sz),
+            MultiHeadSelfAttention(in_c = out_c,out_c = out_c // head_n,head_n = head_n,fm_sz = fm_sz)
+        )
+    
+    def forward(self,x):
+        x0 = self.botneck(x)
+        x = self.sa(x)
+        x = x + x0
+        x = self.pool(x)
+        return x
 
 class OffTANet(nn.Module):
     def __init__(self,net_type = 'ta'):
         super(OffTANet,self).__init__()
         #[N,3,112,112]
         self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels = 2,out_channels = 8,kernel_size = 7,stride = 2,padding = 3),
+            nn.Conv2d(in_channels = 3,out_channels = 8,kernel_size = 7,stride = 2,padding = 3),
             nn.ReLU(),
             nn.BatchNorm2d(8),
             #nn.MaxPool2d(kernel_size = 3,stride = 2,padding = 1)
@@ -155,6 +172,8 @@ class OffTANet(nn.Module):
         #[N,28,14,14]
         if net_type == 'res':
             self.eres = Residual(in_c = 28,out_c = 8)
+        elif net_type == 'bot':
+            self.eres = BottleneckTransformer(in_c = 28,out_c = 8,fm_sz = 14,head_n = 4)
         else:
             self.eres = EnhancedResidual(in_c = 28,out_c = 8,fm_sz = 14,net_type = net_type)
         #[N,8,14,14]
