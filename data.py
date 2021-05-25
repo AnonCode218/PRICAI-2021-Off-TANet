@@ -9,6 +9,7 @@ class CASMECombinedDataset(Dataset):
     def __init__(self,path = '.',
                  img_sz = 128,
                  calculate_strain = False,
+                 raw_img = False,
                  initialized_df = None):
         
         if initialized_df is None:
@@ -25,9 +26,14 @@ class CASMECombinedDataset(Dataset):
                 apex = self.__read_img(
                     prefix + str(row['Apex']) + '.jpg'
                 )
-                self.df.at[idx,'OpticalFlow'] = self.__calc_optical_flow(onset,apex)
-                if calculate_strain:
-                    self.df.at[idx,'OpticalFlow'] = self.__append_optical_strain(self.df.at[idx,'OpticalFlow'])
+                if raw_img:
+                    self.df.at[idx,'OpticalFlow'] = np.vstack(
+                        (np.expand_dims(onset.astype(np.float32) / 255, axis = 0),np.expand_dims(apex.astype(np.float32) / 255, axis = 0))
+                    )
+                else:
+                    self.df.at[idx,'OpticalFlow'] = self.__calc_optical_flow(onset,apex)
+                    if calculate_strain:
+                        self.df.at[idx,'OpticalFlow'] = self.__append_optical_strain(self.df.at[idx,'OpticalFlow'])
                 self.df.at[idx,'Class'] = {'negative':0,'positive':1,'surprise':'2'}[row['Class']]  
         else:
             self.df = initialized_df
