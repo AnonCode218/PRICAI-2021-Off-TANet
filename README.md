@@ -32,3 +32,13 @@ The results can be seen in this chart below.
 | MACNN | 0.6835 | 0.6660 | 70.57M | 793.67M | 297.86MB |
 | Micro-Attention | 0.7086 | 0.7021 | 53.38M | 1.0G | 237.97MB |
 | Off-TANet | 0.7315 | 0.7242 | 59,403 | 30.08M | 5.64MB |
+
+The required Python packages are in **requirements.txt**, and other environments of ours are as follows: 
+
+Operating system: **Ubuntu 16.04.6 LTS**
+
+CPU: **Intel(R) Xeon(R) Gold 5118 CPU@ 2.30GHz**
+
+GPU: **Tesla K80 (10G video RAM)**
+
+CUDA Version: **9.0**
