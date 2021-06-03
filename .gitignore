@@ -11,3 +11,5 @@ dataset*.pkl
 /paper/.~ARFNet.pptx
 !/paper/teaser.pdf
 *.pkl
+*checkpoint*
+*.pth

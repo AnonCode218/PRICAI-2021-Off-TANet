@@ -12,10 +12,10 @@ from data import CASMECombinedDataset
 model_names = ['dual-inception','off-apexnet','ststnet','macnn','micro-attention','off-tanet']
 model_name = model_names[-1]
 
-from_file = 0
+from_file = 1
 data_filename = 'dataset_112*112_strain.pkl'
 data_class = CASMECombinedDataset
-data_args = {'path':'/home/liuf/zjh/dataset','img_sz' : 112,'calculate_strain' : True,'raw_img' : False}
+data_args = {'path':'/home/qwq/Datasets/CASMEs','img_sz' : 112,'calculate_strain' : True,'raw_img' : False}
 
 n_epochs = 201
 device = torch.device("cuda:3" if torch.cuda.is_available() else "cpu")

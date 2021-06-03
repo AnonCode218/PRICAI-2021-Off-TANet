@@ -63,7 +63,7 @@ class MultiHeadSelfAttention(nn.Module):
         return torch.cat(results,dim = 1)
 
 class ChannelAttention(nn.Module):
-    def __init__(self, in_planes, ratio = 16):
+    def __init__(self, in_planes, ratio = 4):
         super(ChannelAttention, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.max_pool = nn.AdaptiveMaxPool2d(1)

@@ -44,6 +44,7 @@ def train(trainset,testset):
                 print('Epoch ' + str(epoch))
                 print(np.mean(np.array(losses)))
                 print(res)
+            #torch.save(model.state_dict(),'{}_.pth'.format(epoch))
         scheduler.step()
             
     return res_dict
